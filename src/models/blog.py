@@ -13,7 +13,7 @@ class Blog(object):
         self.author_id = author_id
         self.title=title
         self.description=description
-        self._id=uuid.uuid4().hex if id is None else id
+        self._id=uuid.uuid4().hex if _id is None else _id
 
 
     def new_post(self):
@@ -43,13 +43,10 @@ class Blog(object):
                  'description' : self.description
                  }
     @classmethod
-    def get_from_mongo(cls,id):
+    def from_mongo(cls, id):
         blog_data = Database.find_one(collection='blogs',
-                                      query={'id': id})
-        return cls(author=blog_data['author'],
-                    title=blog_data['title'],
-                    description=blog_data['description'],
-                    id=blog_data['id'])
+                                      query={'_id': id})
+        return cls(**blog_data)
 
     @classmethod
     def find_by_author_id(cls, author_id):
